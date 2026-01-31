@@ -69,7 +69,7 @@ class WiseShieldStorage {
     defaults[this.STORAGE_KEYS.WARN_MEDIUM] = true;
     defaults[this.STORAGE_KEYS.FORM_PROTECTION] = true;
     defaults[this.STORAGE_KEYS.CACHE_DURATION] = 15; // minutes
-    defaults[this.STORAGE_KEYS.BACKEND_URL] = 'http://localhost:8080/api/v1';
+    defaults[this.STORAGE_KEYS.BACKEND_URL] = 'https://phisher-w12m.onrender.com/api/v1';
     defaults[this.STORAGE_KEYS.API_KEY] = '';
     defaults[this.STORAGE_KEYS.BACKEND_TIMEOUT] = 10;
     defaults[this.STORAGE_KEYS.STANDALONE_MODE] = false;
@@ -184,7 +184,7 @@ class WiseShieldStorage {
 
   // Production backend constant - this can be updated via CI or hardcoded for release
   get PRODUCTION_BACKEND_URL() {
-    return 'https://phishguard-api.onrender.com/api/v1'; // Placeholder to be updated by user
+    return 'https://phisher-w12m.onrender.com/api/v1';
   }
 
   // Backend configuration
@@ -196,7 +196,7 @@ class WiseShieldStorage {
 
   async getBackendConfig() {
     return {
-      url: await this.getSetting(this.STORAGE_KEYS.BACKEND_URL, 'https://localhost:5000'),
+      url: await this.getSetting(this.STORAGE_KEYS.BACKEND_URL, 'https://phisher-w12m.onrender.com/api/v1'),
       apiKey: await this.getSetting(this.STORAGE_KEYS.API_KEY, ''),
       timeout: await this.getSetting(this.STORAGE_KEYS.BACKEND_TIMEOUT, 10),
       standalone: await this.getSetting(this.STORAGE_KEYS.STANDALONE_MODE, true)
