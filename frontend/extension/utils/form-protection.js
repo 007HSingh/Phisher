@@ -30,10 +30,10 @@ class FormProtection {
   // Detect password forms on the page
   detectPasswordForms() {
     const forms = document.querySelectorAll('form');
-    
+
     forms.forEach((form, index) => {
       const passwordInputs = form.querySelectorAll('input[type="password"]');
-      
+
       if (passwordInputs.length > 0) {
         const formId = `form_${index}_${Date.now()}`;
         this.passwordForms.set(formId, {
@@ -53,7 +53,7 @@ class FormProtection {
       if (this.enabled) {
         // Check if site has medium or high threat level
         const threatLevel = await this.getCurrentPageThreatLevel();
-        
+
         if (threatLevel === 'HIGH' || threatLevel === 'MEDIUM') {
           e.preventDefault();
           await this.showFormWarning(threatLevel, form);
@@ -81,7 +81,7 @@ class FormProtection {
   // Show form warning overlay
   async showFormWarning(threatLevel, form) {
     const warningId = `form-warning-${Date.now()}`;
-    
+
     const overlay = document.createElement('div');
     overlay.id = warningId;
     overlay.style.cssText = `
@@ -110,54 +110,74 @@ class FormProtection {
 
     const icon = threatLevel === 'HIGH' ? '🚨' : '⚠️';
     const title = threatLevel === 'HIGH' ? 'WARNING: Dangerous Site' : 'WARNING: Suspicious Site';
-    const message = threatLevel === 'HIGH' 
+    const message = threatLevel === 'HIGH'
       ? 'This site shows strong indicators of phishing. We strongly recommend NOT submitting your password.'
       : 'This site shows some suspicious characteristics. Please verify it\'s legitimate before entering your password.';
 
-    warningBox.innerHTML = `
-      <div style="font-size: 40px; margin-bottom: 16px;">${icon}</div>
-      <h2 style="color: ${threatLevel === 'HIGH' ? '#dc2626' : '#ea580c'}; margin-bottom: 12px; font-size: 20px; font-weight: 700;">${title}</h2>
-      <p style="color: #6b7280; margin-bottom: 20px; font-size: 14px; line-height: 1.6;">${message}</p>
-      
-      <div style="background: #f3f4f6; padding: 12px; border-radius: 6px; margin-bottom: 24px; font-size: 12px; color: #4b5563; text-align: left;">
-        <strong style="display: block; margin-bottom: 8px;">Tips to stay safe:</strong>
-        <ul style="margin: 0; padding-left: 20px;">
-          <li>Always verify the URL in your address bar</li>
-          <li>Check the domain name carefully for typos</li>
-          <li>Look for HTTPS and a padlock icon</li>
-          <li>If unsure, visit the official website directly</li>
-        </ul>
-      </div>
+    const iconDiv = document.createElement('div');
+    iconDiv.style.cssText = 'font-size: 40px; margin-bottom: 16px;';
+    iconDiv.textContent = icon;
+    warningBox.appendChild(iconDiv);
 
-      <div style="display: flex; gap: 12px;">
-        <button id="cancel-submit" style="
-          flex: 1;
-          padding: 10px;
-          border: 1px solid #d1d5db;
-          background: #f3f4f6;
-          color: #1a1d29;
-          border-radius: 6px;
-          font-weight: 600;
-          cursor: pointer;
-          font-size: 14px;
-        ">Don't Submit</button>
-        <button id="force-submit" style="
-          flex: 1;
-          padding: 10px;
-          border: none;
-          background: #4f46e5;
-          color: white;
-          border-radius: 6px;
-          font-weight: 600;
-          cursor: pointer;
-          font-size: 14px;
-        ">I Understand, Submit Anyway</button>
-      </div>
+    const titleH2 = document.createElement('h2');
+    titleH2.style.cssText = `color: ${threatLevel === 'HIGH' ? '#dc2626' : '#ea580c'}; margin-bottom: 12px; font-size: 20px; font-weight: 700;`;
+    titleH2.textContent = title;
+    warningBox.appendChild(titleH2);
 
-      <p style="font-size: 11px; color: #9ca3af; margin-top: 16px;">
-        Having issues? <a href="https://wiseshield.example.com/false-positive" target="_blank" style="color: #4f46e5; text-decoration: none;">Report false positive</a>
-      </p>
-    `;
+    const messageP = document.createElement('p');
+    messageP.style.cssText = 'color: #6b7280; margin-bottom: 20px; font-size: 14px; line-height: 1.6;';
+    messageP.textContent = message;
+    warningBox.appendChild(messageP);
+
+    const tipsDiv = document.createElement('div');
+    tipsDiv.style.cssText = 'background: #f3f4f6; padding: 12px; border-radius: 6px; margin-bottom: 24px; font-size: 12px; color: #4b5563; text-align: left;';
+
+    const tipsTitle = document.createElement('strong');
+    tipsTitle.style.cssText = 'display: block; margin-bottom: 8px;';
+    tipsTitle.textContent = 'Tips to stay safe:';
+    tipsDiv.appendChild(tipsTitle);
+
+    const tipsList = document.createElement('ul');
+    tipsList.style.cssText = 'margin: 0; padding-left: 20px;';
+
+    ['Always verify the URL in your address bar',
+      'Check the domain name carefully for typos',
+      'Look for HTTPS and a padlock icon',
+      'If unsure, visit the official website directly'].forEach(tip => {
+        const li = document.createElement('li');
+        li.textContent = tip;
+        tipsList.appendChild(li);
+      });
+    tipsDiv.appendChild(tipsList);
+    warningBox.appendChild(tipsDiv);
+
+    const buttonContainer = document.createElement('div');
+    buttonContainer.style.cssText = 'display: flex; gap: 12px;';
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.id = 'cancel-submit';
+    cancelBtn.style.cssText = 'flex: 1; padding: 10px; border: 1px solid #d1d5db; background: #f3f4f6; color: #1a1d29; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px;';
+    cancelBtn.textContent = 'Don\'t Submit';
+    buttonContainer.appendChild(cancelBtn);
+
+    const forceBtn = document.createElement('button');
+    forceBtn.id = 'force-submit';
+    forceBtn.style.cssText = 'flex: 1; padding: 10px; border: none; background: #4f46e5; color: white; border-radius: 6px; font-weight: 600; cursor: pointer; font-size: 14px;';
+    forceBtn.textContent = 'I Understand, Submit Anyway';
+    buttonContainer.appendChild(forceBtn);
+    warningBox.appendChild(buttonContainer);
+
+    const footerP = document.createElement('p');
+    footerP.style.cssText = 'font-size: 11px; color: #9ca3af; margin-top: 16px;';
+    footerP.textContent = 'Having issues? ';
+
+    const reportLink = document.createElement('a');
+    reportLink.href = 'https://wiseshield.example.com/false-positive';
+    reportLink.target = '_blank';
+    reportLink.style.cssText = 'color: #4f46e5; text-decoration: none;';
+    reportLink.textContent = 'Report false positive';
+    footerP.appendChild(reportLink);
+    warningBox.appendChild(footerP);
 
     overlay.appendChild(warningBox);
     document.body.appendChild(overlay);

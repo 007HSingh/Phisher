@@ -4,18 +4,18 @@ async function switchTab(tabName) {
   document.querySelectorAll('.tab-content').forEach(tab => {
     tab.classList.remove('active');
   });
-  
+
   // Remove active class from all buttons
   document.querySelectorAll('.tab-button').forEach(btn => {
     btn.classList.remove('active');
   });
-  
+
   // Show selected tab
   document.getElementById(tabName).classList.add('active');
-  
+
   // Add active class to clicked button
   event.target.classList.add('active');
-  
+
   // Load tab-specific data
   if (tabName === 'whitelist') {
     await loadWhitelist();
@@ -41,7 +41,7 @@ async function loadGeneralSettings() {
   const enabled = await wsStorage.getSetting(wsStorage.STORAGE_KEYS.ENABLED, true);
   const notifications = await wsStorage.getSetting(wsStorage.STORAGE_KEYS.NOTIFICATIONS, true);
   const autoCache = await wsStorage.getSetting(wsStorage.STORAGE_KEYS.AUTO_CACHE, true);
-  
+
   updateToggle('enableToggle', enabled);
   updateToggle('notifyToggle', notifications);
   updateToggle('cacheToggle', autoCache);
@@ -54,7 +54,7 @@ async function loadProtectionSettings() {
   const warnMedium = await wsStorage.getSetting(wsStorage.STORAGE_KEYS.WARN_MEDIUM, true);
   const formProtect = await wsStorage.getSetting(wsStorage.STORAGE_KEYS.FORM_PROTECTION, true);
   const cacheDuration = await wsStorage.getSetting(wsStorage.STORAGE_KEYS.CACHE_DURATION, 15);
-  
+
   document.getElementById('sensitivityLevel').value = sensitivity;
   updateToggle('blockHighToggle', blockHigh);
   updateToggle('warnMediumToggle', warnMedium);
@@ -69,7 +69,7 @@ async function loadBackendConfig() {
   document.getElementById('apiKey').value = config.apiKey;
   document.getElementById('backendTimeout').value = config.timeout;
   updateToggle('standaloneToggle', config.standalone);
-  
+
   // Update connection status
   await checkBackendStatus();
 }
@@ -78,52 +78,84 @@ async function loadBackendConfig() {
 async function loadWhitelist() {
   const whitelist = await wsStorage.getWhitelist();
   const container = document.getElementById('whitelistDomains');
-  
+
   if (whitelist.length === 0) {
-    container.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 20px;">No trusted domains added yet</p>';
+    container.textContent = '';
+    const emptyMsg = document.createElement('p');
+    emptyMsg.style.cssText = 'color: #9ca3af; text-align: center; padding: 20px;';
+    emptyMsg.textContent = 'No trusted domains added yet';
+    container.appendChild(emptyMsg);
     return;
   }
-  
-  container.innerHTML = whitelist.map(domain => `
-    <div class="domain-item">
-      <span class="domain-item-name">${escapeHtml(domain)}</span>
-      <button class="btn-danger" onclick="removeDomainFromWhitelist('${escapeHtml(domain)}')">Remove</button>
-    </div>
-  `).join('');
+
+  container.textContent = '';
+  whitelist.forEach(domain => {
+    const item = document.createElement('div');
+    item.className = 'domain-item';
+
+    const name = document.createElement('span');
+    name.className = 'domain-item-name';
+    name.textContent = domain;
+    item.appendChild(name);
+
+    const btn = document.createElement('button');
+    btn.className = 'btn-danger';
+    btn.textContent = 'Remove';
+    btn.onclick = () => removeDomainFromWhitelist(domain);
+    item.appendChild(btn);
+
+    container.appendChild(item);
+  });
 }
 
 async function loadBlacklist() {
   const blacklist = await wsStorage.getBlacklist();
   const container = document.getElementById('blacklistDomains');
-  
+
   if (blacklist.length === 0) {
-    container.innerHTML = '<p style="color: #9ca3af; text-align: center; padding: 20px;">No blocked domains</p>';
+    container.textContent = '';
+    const emptyMsg = document.createElement('p');
+    emptyMsg.style.cssText = 'color: #9ca3af; text-align: center; padding: 20px;';
+    emptyMsg.textContent = 'No blocked domains';
+    container.appendChild(emptyMsg);
     return;
   }
-  
-  container.innerHTML = blacklist.map(domain => `
-    <div class="domain-item">
-      <span class="domain-item-name">${escapeHtml(domain)}</span>
-      <button class="btn-danger" onclick="removeDomainFromBlacklist('${escapeHtml(domain)}')">Remove</button>
-    </div>
-  `).join('');
+
+  container.textContent = '';
+  blacklist.forEach(domain => {
+    const item = document.createElement('div');
+    item.className = 'domain-item';
+
+    const name = document.createElement('span');
+    name.className = 'domain-item-name';
+    name.textContent = domain;
+    item.appendChild(name);
+
+    const btn = document.createElement('button');
+    btn.className = 'btn-danger';
+    btn.textContent = 'Remove';
+    btn.onclick = () => removeDomainFromBlacklist(domain);
+    item.appendChild(btn);
+
+    container.appendChild(item);
+  });
 }
 
 async function addDomain() {
   const input = document.getElementById('domainInput');
   const domain = input.value.trim().toLowerCase();
-  
+
   if (!domain) {
     showMessage('Please enter a domain', false);
     return;
   }
-  
+
   // Validate domain format
   if (!/^([a-z0-9]([a-z0-9-]*[a-z0-9])?\.)+[a-z]{2,}$/.test(domain)) {
     showMessage('Invalid domain format', false);
     return;
   }
-  
+
   const added = await wsStorage.addToWhitelist(domain);
   if (added) {
     showMessage(`✓ ${domain} added to whitelist`, true);
@@ -149,47 +181,69 @@ async function removeDomainFromBlacklist(domain) {
 // Statistics
 async function loadStatistics() {
   const stats = await wsStorage.getAllSettings();
-  
-  document.getElementById('statThreatsBlocked').textContent = 
+
+  document.getElementById('statThreatsBlocked').textContent =
     stats[wsStorage.STORAGE_KEYS.STATS_THREATS_BLOCKED] || 0;
-  document.getElementById('statWarnings').textContent = 
+  document.getElementById('statWarnings').textContent =
     stats[wsStorage.STORAGE_KEYS.STATS_WARNINGS] || 0;
-  document.getElementById('statUrlsScanned').textContent = 
+  document.getElementById('statUrlsScanned').textContent =
     stats[wsStorage.STORAGE_KEYS.STATS_URLS_SCANNED] || 0;
-  document.getElementById('statCached').textContent = 
+  document.getElementById('statCached').textContent =
     Object.keys(stats).filter(k => k.startsWith('ws_cache_')).length;
 }
 
 async function loadRecentActivity() {
   const activities = await wsStorage.getRecentActivity();
   const container = document.getElementById('recentActivity');
-  
+
   if (activities.length === 0) {
-    container.innerHTML = '<p style="color: #9ca3af;">No recent activity</p>';
+    container.textContent = '';
+    const emptyMsg = document.createElement('p');
+    emptyMsg.style.cssText = 'color: #9ca3af;';
+    emptyMsg.textContent = 'No recent activity';
+    container.appendChild(emptyMsg);
     return;
   }
-  
-  const html = activities.map(activity => {
+
+  container.textContent = '';
+  activities.forEach(activity => {
     const date = new Date(activity.timestamp);
     const time = date.toLocaleTimeString();
     const icon = activity.threatLevel === 'HIGH' ? '🚨' : activity.threatLevel === 'MEDIUM' ? '⚠️' : '✓';
-    return `
-      <div style="padding: 10px 0; border-bottom: 1px solid #f3f4f6;">
-        <div style="display: flex; justify-content: space-between; align-items: start;">
-          <div>
-            <span style="margin-right: 8px;">${icon}</span>
-            <span style="font-family: monospace; font-size: 12px;">${escapeHtml(activity.url)}</span>
-          </div>
-          <div style="font-size: 11px; color: #9ca3af; text-align: right;">
-            <div>${time}</div>
-            <div>${activity.type}</div>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-  
-  container.innerHTML = html;
+
+    const item = document.createElement('div');
+    item.style.cssText = 'padding: 10px 0; border-bottom: 1px solid #f3f4f6;';
+
+    const flex = document.createElement('div');
+    flex.style.cssText = 'display: flex; justify-content: space-between; align-items: start;';
+
+    const left = document.createElement('div');
+    const iconSpan = document.createElement('span');
+    iconSpan.style.marginRight = '8px';
+    iconSpan.textContent = icon;
+    left.appendChild(iconSpan);
+
+    const urlSpan = document.createElement('span');
+    urlSpan.style.cssText = 'font-family: monospace; font-size: 12px;';
+    urlSpan.textContent = activity.url;
+    left.appendChild(urlSpan);
+    flex.appendChild(left);
+
+    const right = document.createElement('div');
+    right.style.cssText = 'font-size: 11px; color: #9ca3af; text-align: right;';
+
+    const timeDiv = document.createElement('div');
+    timeDiv.textContent = time;
+    right.appendChild(timeDiv);
+
+    const typeDiv = document.createElement('div');
+    typeDiv.textContent = activity.type;
+    right.appendChild(typeDiv);
+
+    flex.appendChild(right);
+    item.appendChild(flex);
+    container.appendChild(item);
+  });
 }
 
 async function resetStatistics() {
@@ -216,27 +270,27 @@ async function exportStatistics() {
 async function testBackend() {
   const url = document.getElementById('backendUrl').value;
   const apiKey = document.getElementById('apiKey').value;
-  
+
   if (!url) {
     showTestResult('Please enter a backend URL', false);
     return;
   }
-  
+
   showTestResult('Testing connection...', null);
-  
+
   try {
     const timeout = 5000;
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
-    
+
     const response = await fetch(`${url}/health`, {
       method: 'GET',
       headers: apiKey ? { 'Authorization': `Bearer ${apiKey}` } : {},
       signal: controller.signal
     });
-    
+
     clearTimeout(id);
-    
+
     if (response.ok) {
       const data = await response.json();
       showTestResult('✓ Backend connection successful!', true);
@@ -252,12 +306,12 @@ async function saveBackendConfig() {
   const url = document.getElementById('backendUrl').value;
   const apiKey = document.getElementById('apiKey').value;
   const timeout = document.getElementById('backendTimeout').value;
-  
+
   if (!url) {
     showMessage('Please enter a backend URL', false);
     return;
   }
-  
+
   await wsStorage.setBackendConfig(url, apiKey, timeout);
   showMessage('✓ Backend configuration saved', true);
   await checkBackendStatus();
@@ -268,26 +322,26 @@ async function checkBackendStatus() {
   const indicator = document.getElementById('statusIndicator');
   const statusText = document.getElementById('statusText');
   const statusDetail = document.getElementById('statusDetail');
-  
+
   if (config.standalone) {
     indicator.classList.add('disconnected');
     statusText.textContent = '🔴 Backend: Disconnected (Standalone Mode)';
     statusDetail.textContent = 'Using local heuristics for analysis';
     return;
   }
-  
+
   try {
     const timeout = 3000;
     const controller = new AbortController();
     const id = setTimeout(() => controller.abort(), timeout);
-    
+
     const response = await fetch(`${config.url}/health`, {
       method: 'GET',
       signal: controller.signal
     });
-    
+
     clearTimeout(id);
-    
+
     if (response.ok) {
       indicator.classList.remove('disconnected');
       statusText.textContent = '🟢 Backend: Connected';
@@ -325,7 +379,7 @@ function updateToggle(elementId, isActive) {
 
 async function toggleSetting(settingKey) {
   let storageKey;
-  
+
   switch (settingKey) {
     case 'enabled':
       storageKey = wsStorage.STORAGE_KEYS.ENABLED;
@@ -351,16 +405,16 @@ async function toggleSetting(settingKey) {
     default:
       return;
   }
-  
+
   const current = await wsStorage.getSetting(storageKey, true);
   await wsStorage.setSetting(storageKey, !current);
-  
+
   // Update UI
   const elementId = event.target.closest('.toggle')?.id;
   if (elementId) {
     updateToggle(elementId, !current);
   }
-  
+
   // If backend standalone mode changed, update status
   if (settingKey === 'standaloneMode') {
     await checkBackendStatus();
@@ -369,7 +423,7 @@ async function toggleSetting(settingKey) {
 
 async function saveSetting(settingKey, value) {
   let storageKey;
-  
+
   switch (settingKey) {
     case 'sensitivityLevel':
       storageKey = wsStorage.STORAGE_KEYS.SENSITIVITY_LEVEL;
@@ -383,7 +437,7 @@ async function saveSetting(settingKey, value) {
     default:
       return;
   }
-  
+
   await wsStorage.setSetting(storageKey, value);
 }
 
@@ -394,7 +448,7 @@ function showMessage(text, success) {
   messageEl.style.borderColor = success ? '#86efac' : '#fca5a5';
   messageEl.style.color = success ? '#166534' : '#dc2626';
   messageEl.classList.add('show');
-  
+
   setTimeout(() => {
     messageEl.classList.remove('show');
   }, 3000);
@@ -402,18 +456,19 @@ function showMessage(text, success) {
 
 function showTestResult(text, success) {
   const resultEl = document.getElementById('testResult');
-  resultEl.innerHTML = `
-    <div style="
-      background: ${success === null ? '#eff6ff' : success ? '#f0fdf4' : '#fef2f2'};
-      border: 1px solid ${success === null ? '#bfdbfe' : success ? '#86efac' : '#fca5a5'};
-      border-radius: 6px;
-      padding: 12px;
-      font-size: 13px;
-      color: ${success === null ? '#1e40af' : success ? '#166534' : '#dc2626'};
-    ">
-      ${text}
-    </div>
+  resultEl.textContent = '';
+
+  const div = document.createElement('div');
+  div.style.cssText = `
+    background: ${success === null ? '#eff6ff' : success ? '#f0fdf4' : '#fef2f2'};
+    border: 1px solid ${success === null ? '#bfdbfe' : success ? '#86efac' : '#fca5a5'};
+    border-radius: 6px;
+    padding: 12px;
+    font-size: 13px;
+    color: ${success === null ? '#1e40af' : success ? '#166534' : '#dc2626'};
   `;
+  div.textContent = text;
+  resultEl.appendChild(div);
 }
 
 function escapeHtml(str) {

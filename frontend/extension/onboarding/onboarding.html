@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -36,6 +37,7 @@
         opacity: 0;
         transform: translateY(20px);
       }
+
       to {
         opacity: 1;
         transform: translateY(0);
@@ -60,6 +62,7 @@
       from {
         opacity: 0;
       }
+
       to {
         opacity: 1;
       }
@@ -242,6 +245,7 @@
     }
   </style>
 </head>
+
 <body>
   <div class="onboarding-container">
     <!-- Slide 1: Welcome -->
@@ -249,9 +253,10 @@
       <div class="slide-icon">🛡️</div>
       <h1>Welcome to WiseShield</h1>
       <p>Your personal guard against phishing attacks</p>
-      
+
       <div class="description">
-        <p>WiseShield uses advanced AI and heuristics to detect and block phishing attempts in real-time, keeping your accounts and personal information safe.</p>
+        <p>WiseShield uses advanced AI and heuristics to detect and block phishing attempts in real-time, keeping your
+          accounts and personal information safe.</p>
       </div>
 
       <div class="stat-grid">
@@ -266,8 +271,8 @@
       </div>
 
       <div class="buttons">
-        <button class="btn-primary" onclick="nextSlide()">Get Started</button>
-        <button class="btn-secondary" onclick="skipOnboarding()">Skip Tutorial</button>
+        <button class="btn-primary onboarding-next">Get Started</button>
+        <button class="btn-secondary onboarding-skip">Skip Tutorial</button>
       </div>
 
       <div class="progress-dots">
@@ -283,24 +288,26 @@
     <div class="slide">
       <div class="slide-icon">✨</div>
       <h1>Powerful Features</h1>
-      
+
       <div class="feature-list">
         <div class="feature-item">
           <div class="feature-icon">🔍</div>
           <div>
             <strong>Real-time Analysis</strong>
-            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Every URL is analyzed instantly before you visit</p>
+            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Every URL is analyzed instantly before you
+              visit</p>
           </div>
         </div>
-        
+
         <div class="feature-item">
           <div class="feature-icon">🚨</div>
           <div>
             <strong>Instant Alerts</strong>
-            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Get warned immediately if a site shows phishing signs</p>
+            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Get warned immediately if a site shows phishing
+              signs</p>
           </div>
         </div>
-        
+
         <div class="feature-item">
           <div class="feature-icon">⚡</div>
           <div>
@@ -308,7 +315,7 @@
             <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Minimal performance impact on your browsing</p>
           </div>
         </div>
-        
+
         <div class="feature-item">
           <div class="feature-icon">🔐</div>
           <div>
@@ -319,8 +326,8 @@
       </div>
 
       <div class="buttons">
-        <button class="btn-secondary" onclick="previousSlide()">Back</button>
-        <button class="btn-primary" onclick="nextSlide()">Continue</button>
+        <button class="btn-secondary onboarding-prev">Back</button>
+        <button class="btn-primary onboarding-next">Continue</button>
       </div>
 
       <div class="progress-dots">
@@ -336,7 +343,7 @@
     <div class="slide">
       <div class="slide-icon">🔬</div>
       <h1>How It Works</h1>
-      
+
       <div class="description">
         <p>WiseShield analyzes URLs using multiple detection methods:</p>
       </div>
@@ -346,26 +353,29 @@
           <div class="feature-icon">1️⃣</div>
           <div>
             <strong>Domain Analysis</strong>
-            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Checks for suspicious domain patterns and IP addresses</p>
+            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Checks for suspicious domain patterns and IP
+              addresses</p>
           </div>
         </div>
-        
+
         <div class="feature-item">
           <div class="feature-icon">2️⃣</div>
           <div>
             <strong>URL Inspection</strong>
-            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Detects phishing keywords and suspicious URL structures</p>
+            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Detects phishing keywords and suspicious URL
+              structures</p>
           </div>
         </div>
-        
+
         <div class="feature-item">
           <div class="feature-icon">3️⃣</div>
           <div>
             <strong>Threat Scoring</strong>
-            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Calculates risk level and decides whether to block</p>
+            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Calculates risk level and decides whether to
+              block</p>
           </div>
         </div>
-        
+
         <div class="feature-item">
           <div class="feature-icon">4️⃣</div>
           <div>
@@ -376,8 +386,8 @@
       </div>
 
       <div class="buttons">
-        <button class="btn-secondary" onclick="previousSlide()">Back</button>
-        <button class="btn-primary" onclick="nextSlide()">Next</button>
+        <button class="btn-secondary onboarding-prev">Back</button>
+        <button class="btn-primary onboarding-next">Next</button>
       </div>
 
       <div class="progress-dots">
@@ -393,7 +403,7 @@
     <div class="slide">
       <div class="slide-icon">⚙️</div>
       <h1>Customize Protection</h1>
-      
+
       <div class="description">
         <p>WiseShield lets you control how strict your protection should be:</p>
       </div>
@@ -403,10 +413,11 @@
           <div class="feature-icon">📊</div>
           <div>
             <strong>Sensitivity Levels</strong>
-            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Choose between Low, Medium, and High detection</p>
+            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Choose between Low, Medium, and High detection
+            </p>
           </div>
         </div>
-        
+
         <div class="feature-item">
           <div class="feature-icon">✅</div>
           <div>
@@ -414,7 +425,7 @@
             <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Add domains you trust to skip checks</p>
           </div>
         </div>
-        
+
         <div class="feature-item">
           <div class="feature-icon">🔔</div>
           <div>
@@ -422,7 +433,7 @@
             <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Control when and how you're alerted</p>
           </div>
         </div>
-        
+
         <div class="feature-item">
           <div class="feature-icon">📈</div>
           <div>
@@ -433,8 +444,8 @@
       </div>
 
       <div class="buttons">
-        <button class="btn-secondary" onclick="previousSlide()">Back</button>
-        <button class="btn-primary" onclick="nextSlide()">Continue</button>
+        <button class="btn-secondary onboarding-prev">Back</button>
+        <button class="btn-primary onboarding-next">Continue</button>
       </div>
 
       <div class="progress-dots">
@@ -450,7 +461,7 @@
     <div class="slide">
       <div class="slide-icon">🎉</div>
       <h1>You're All Set!</h1>
-      
+
       <div class="description">
         <p>WiseShield is now protecting you. Here are some tips to get the most out of it:</p>
       </div>
@@ -464,30 +475,33 @@
           <div class="feature-icon">💡</div>
           <div>
             <strong>Check the Badge</strong>
-            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Look at the WiseShield icon in your toolbar for status updates</p>
+            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Look at the WiseShield icon in your toolbar for
+              status updates</p>
           </div>
         </div>
-        
+
         <div class="feature-item">
           <div class="feature-icon">⚠️</div>
           <div>
             <strong>Heed the Warnings</strong>
-            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">If WiseShield warns you, don't proceed to the site</p>
+            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">If WiseShield warns you, don't proceed to the
+              site</p>
           </div>
         </div>
-        
+
         <div class="feature-item">
           <div class="feature-icon">🔧</div>
           <div>
             <strong>Adjust Settings</strong>
-            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Visit settings to customize protection level</p>
+            <p style="font-size: 12px; color: #6b7280; margin-top: 4px;">Visit settings to customize protection level
+            </p>
           </div>
         </div>
       </div>
 
       <div class="buttons">
-        <button class="btn-secondary" onclick="openSettings()">Go to Settings</button>
-        <button class="btn-primary" onclick="skipOnboarding()">Start Browsing</button>
+        <button class="btn-secondary onboarding-settings">Go to Settings</button>
+        <button class="btn-primary onboarding-skip">Start Browsing</button>
       </div>
 
       <div class="progress-dots">
@@ -500,48 +514,7 @@
     </div>
   </div>
 
-  <script>
-    let currentSlide = 0;
-    const slides = document.querySelectorAll('.slide');
-
-    function showSlide(n) {
-      slides.forEach(slide => slide.classList.remove('active'));
-      slides[n].classList.add('active');
-      document.querySelectorAll('.dot').forEach((dot, i) => {
-        dot.classList.toggle('active', i === n);
-      });
-    }
-
-    function nextSlide() {
-      if (currentSlide < slides.length - 1) {
-        currentSlide++;
-        showSlide(currentSlide);
-      }
-    }
-
-    function previousSlide() {
-      if (currentSlide > 0) {
-        currentSlide--;
-        showSlide(currentSlide);
-      }
-    }
-
-    function skipOnboarding() {
-      localStorage.setItem('ws_onboarding_completed', 'true');
-      window.close();
-    }
-
-    function openSettings() {
-      chrome.runtime.openOptionsPage();
-      localStorage.setItem('ws_onboarding_completed', 'true');
-      window.close();
-    }
-
-    // Keyboard navigation
-    document.addEventListener('keydown', (e) => {
-      if (e.key === 'ArrowRight') nextSlide();
-      if (e.key === 'ArrowLeft') previousSlide();
-    });
-  </script>
+  <script src="onboarding.js"></script>
 </body>
+
 </html>
