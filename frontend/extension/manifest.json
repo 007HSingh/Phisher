@@ -15,8 +15,7 @@
     "storage",
     "tabs",
     "scripting",
-    "notifications",
-    "downloads"
+    "notifications"
   ],
   "host_permissions": [
     "<all_urls>"
@@ -26,8 +25,16 @@
   },
   "content_scripts": [
     {
-      "matches": ["<all_urls>"],
-      "js": ["utils/storage.js", "utils/api.js", "utils/helpers.js", "utils/form-protection.js", "content.js"],
+      "matches": [
+        "<all_urls>"
+      ],
+      "js": [
+        "utils/storage.js",
+        "utils/api.js",
+        "utils/helpers.js",
+        "utils/form-protection.js",
+        "content.js"
+      ],
       "run_at": "document_start"
     }
   ],
@@ -42,8 +49,13 @@
   "options_page": "settings/settings.html",
   "web_accessible_resources": [
     {
-      "resources": ["warning/warning.html", "onboarding/onboarding.html"],
-      "matches": ["<all_urls>"]
+      "resources": [
+        "warning/warning.html",
+        "onboarding/onboarding.html"
+      ],
+      "matches": [
+        "<all_urls>"
+      ]
     }
   ],
   "content_security_policy": {

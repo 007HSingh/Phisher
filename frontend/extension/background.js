@@ -12,6 +12,14 @@ const blockedURLs = new Set();
 
 // Standalone mode - no backend required
 let STANDALONE_MODE = true;
+const DEBUG_MODE = false;
+
+function logStatus(message, data = null) {
+  if (DEBUG_MODE) {
+    if (data) console.log(`🛡️ [WiseShield] ${message}`, data);
+    else console.log(`🛡️ [WiseShield] ${message}`);
+  }
+}
 
 // Initialize on first install/update
 chrome.runtime.onInstalled.addListener(async (details) => {
@@ -23,7 +31,7 @@ chrome.runtime.onInstalled.addListener(async (details) => {
   // Initialize storage defaults
   await wsStorage.initializeDefaults();
 
-  console.log('🛡️ WiseShield installed/updated');
+  logStatus('WiseShield installed/updated');
 });
 
 // Check backend status periodically
@@ -42,7 +50,7 @@ chrome.webNavigation.onBeforeNavigate.addListener(async (details) => {
   const url = details.url;
   const tabId = details.tabId;
 
-  console.log('Navigation detected:', url);
+  logStatus('Navigation detected:', url);
 
   // Check if extension is enabled
   const enabled = await wsStorage.getSetting(wsStorage.STORAGE_KEYS.ENABLED, true);

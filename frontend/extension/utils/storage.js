@@ -182,6 +182,11 @@ class WiseShieldStorage {
     await this.setSetting(this.STORAGE_KEYS.RECENT_ACTIVITY, []);
   }
 
+  // Production backend constant - this can be updated via CI or hardcoded for release
+  get PRODUCTION_BACKEND_URL() {
+    return 'https://phishguard-api.onrender.com/api/v1'; // Placeholder to be updated by user
+  }
+
   // Backend configuration
   async setBackendConfig(url, apiKey, timeout) {
     await this.setSetting(this.STORAGE_KEYS.BACKEND_URL, url);

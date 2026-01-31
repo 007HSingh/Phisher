@@ -32,7 +32,6 @@ ai-service/venv/
 ai-service/ENV/
 ai-service/env.bak/
 ai-service/venv.bak/
-ai-service/model/*.pkl
 
 # Docker
 .docker/

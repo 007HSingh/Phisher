@@ -7,14 +7,39 @@ app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+import requests
+
 # Path to the model
 MODEL_PATH = os.getenv('MODEL_PATH', 'model/url_model.pkl')
+MODEL_URL = os.getenv('MODEL_URL') # Optional: URL to download the model from
+
+def download_model(url, path):
+    try:
+        logger.info(f"Downloading model from {url}...")
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        response = requests.get(url, stream=True)
+        response.raise_for_status()
+        with open(path, 'wb') as f:
+            for chunk in response.iter_content(chunk_size=8192):
+                f.write(chunk)
+        logger.info("Model downloaded successfully")
+        return True
+    except Exception as e:
+        logger.error(f"Failed to download model: {e}")
+        return False
 
 # Load the model
+if not os.path.exists(MODEL_PATH) and MODEL_URL:
+    download_model(MODEL_URL, MODEL_PATH)
+
 try:
-    with open(MODEL_PATH, 'rb') as f:
-        model = pickle.load(f)
-    logger.info("Model loaded successfully")
+    if os.path.exists(MODEL_PATH):
+        with open(MODEL_PATH, 'rb') as f:
+            model = pickle.load(f)
+        logger.info("Model loaded successfully")
+    else:
+        logger.warning(f"Model file not found at {MODEL_PATH}")
+        model = None
 except Exception as e:
     logger.error(f"Failed to load model: {e}")
     model = None
@@ -55,5 +80,9 @@ def classify():
         logger.error(f"Prediction error: {e}")
         return jsonify({"error": str(e)}), 500
 
+import os
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5001)
+    # Cloud providers like Render/Railway/Heroku assign a dynamic port via the PORT env var
+    port = int(os.environ.get('PORT', 5001))
+    app.run(host='0.0.0.0', port=port)

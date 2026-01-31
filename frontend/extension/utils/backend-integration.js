@@ -14,7 +14,7 @@ class BackendIntegration {
   // Check if backend is available and configured
   async isBackendAvailable() {
     const config = await this.getBackendConfig();
-    
+
     if (config.standalone) {
       return false; // Standalone mode
     }
@@ -37,7 +37,9 @@ class BackendIntegration {
       clearTimeout(id);
       return response.ok;
     } catch (error) {
-      console.log('Backend health check failed:', error.message);
+      if (typeof DEBUG_MODE !== 'undefined' && DEBUG_MODE) {
+        console.log('Backend health check failed:', error.message);
+      }
       return false;
     }
   }
