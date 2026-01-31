@@ -1,0 +1,663 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WiseShield Settings</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8f9fb;
+      color: #1a1d29;
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 40px;
+      padding-bottom: 20px;
+      border-bottom: 2px solid #e8eaed;
+    }
+
+    .header-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+
+    .header-content h1 {
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .header-content p {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 30px;
+      border-bottom: 1px solid #e8eaed;
+    }
+
+    .tab-button {
+      padding: 12px 20px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 600;
+      color: #6b7280;
+      border-bottom: 3px solid transparent;
+      transition: all 0.3s ease;
+    }
+
+    .tab-button.active {
+      color: #4f46e5;
+      border-bottom-color: #4f46e5;
+    }
+
+    .tab-button:hover {
+      color: #1a1d29;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .section {
+      background: white;
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e8eaed;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 16px;
+      color: #1a1d29;
+    }
+
+    .section-description {
+      font-size: 13px;
+      color: #6b7280;
+      margin-bottom: 20px;
+    }
+
+    .setting-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 0;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    .setting-item:last-child {
+      border-bottom: none;
+    }
+
+    .setting-label {
+      flex: 1;
+    }
+
+    .setting-label-title {
+      font-weight: 600;
+      color: #1a1d29;
+      margin-bottom: 4px;
+    }
+
+    .setting-label-description {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .toggle {
+      position: relative;
+      width: 50px;
+      height: 28px;
+      background: #d1d5db;
+      border-radius: 14px;
+      cursor: pointer;
+      transition: background 0.3s ease;
+    }
+
+    .toggle.active {
+      background: #4f46e5;
+    }
+
+    .toggle-slider {
+      position: absolute;
+      top: 2px;
+      left: 2px;
+      width: 24px;
+      height: 24px;
+      background: white;
+      border-radius: 12px;
+      transition: left 0.3s ease;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .toggle.active .toggle-slider {
+      left: 24px;
+    }
+
+    .select-group {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    select {
+      padding: 8px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      background: white;
+      cursor: pointer;
+      min-width: 150px;
+    }
+
+    select:focus {
+      outline: none;
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    .whitelist-section {
+      margin-top: 20px;
+    }
+
+    .whitelist-input {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 10px 12px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 14px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #4f46e5;
+      box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+    }
+
+    button {
+      padding: 10px 16px;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .btn-primary {
+      background: #4f46e5;
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: #4338ca;
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #1a1d29;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+    }
+
+    .btn-danger {
+      background: #fee2e2;
+      color: #dc2626;
+      font-size: 12px;
+      padding: 6px 10px;
+    }
+
+    .btn-danger:hover {
+      background: #fecaca;
+    }
+
+    .domain-list {
+      margin-top: 12px;
+    }
+
+    .domain-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 10px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .domain-item-name {
+      font-family: 'Courier New', monospace;
+      color: #1a1d29;
+      word-break: break-all;
+    }
+
+    .backend-config {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      padding: 16px;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    .backend-config.error {
+      background: #fef2f2;
+      border-color: #fca5a5;
+    }
+
+    .backend-status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      font-weight: 600;
+    }
+
+    .status-indicator {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: #22c55e;
+      animation: pulse 2s infinite;
+    }
+
+    .status-indicator.disconnected {
+      background: #ef4444;
+      animation: none;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 16px;
+      margin-bottom: 20px;
+    }
+
+    .stat-card {
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: white;
+      padding: 20px;
+      border-radius: 8px;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      opacity: 0.9;
+    }
+
+    .button-group {
+      display: flex;
+      gap: 12px;
+      margin-top: 20px;
+    }
+
+    .info-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 13px;
+      color: #1e40af;
+      margin-bottom: 16px;
+    }
+
+    .success-message {
+      background: #f0fdf4;
+      border: 1px solid #86efac;
+      border-radius: 6px;
+      padding: 12px;
+      font-size: 13px;
+      color: #166534;
+      margin-bottom: 16px;
+      display: none;
+    }
+
+    .success-message.show {
+      display: block;
+    }
+
+    .footer {
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 1px solid #e8eaed;
+      text-align: center;
+      font-size: 12px;
+      color: #6b7280;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="header-icon">🛡️</div>
+      <div class="header-content">
+        <h1>WiseShield Settings</h1>
+        <p>Configure your phishing protection preferences</p>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab-button active" onclick="switchTab('general')">General</button>
+      <button class="tab-button" onclick="switchTab('protection')">Protection</button>
+      <button class="tab-button" onclick="switchTab('whitelist')">Whitelist</button>
+      <button class="tab-button" onclick="switchTab('backend')">Backend</button>
+      <button class="tab-button" onclick="switchTab('statistics')">Statistics</button>
+    </div>
+
+    <!-- General Tab -->
+    <div id="general" class="tab-content active">
+      <div class="section">
+        <div class="section-title">General Settings</div>
+        <div class="setting-item">
+          <div class="setting-label">
+            <div class="setting-label-title">Enable WiseShield</div>
+            <div class="setting-label-description">Turn protection on or off</div>
+          </div>
+          <div class="toggle active" id="enableToggle" onclick="toggleSetting('enabled')">
+            <div class="toggle-slider"></div>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-label">
+            <div class="setting-label-title">Show Notifications</div>
+            <div class="setting-label-description">Display notifications for detected threats</div>
+          </div>
+          <div class="toggle active" id="notifyToggle" onclick="toggleSetting('notifications')">
+            <div class="toggle-slider"></div>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-label">
+            <div class="setting-label-title">Auto-update Cache</div>
+            <div class="setting-label-description">Automatically refresh cached results</div>
+          </div>
+          <div class="toggle active" id="cacheToggle" onclick="toggleSetting('autoCache')">
+            <div class="toggle-slider"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Protection Tab -->
+    <div id="protection" class="tab-content">
+      <div class="section">
+        <div class="section-title">Protection Level</div>
+        <div class="section-description">Choose how aggressive phishing detection should be</div>
+        
+        <div class="setting-item">
+          <div class="setting-label">
+            <div class="setting-label-title">Detection Sensitivity</div>
+            <div class="setting-label-description">Higher sensitivity = more false positives but better protection</div>
+          </div>
+          <div class="select-group">
+            <select id="sensitivityLevel" onchange="saveSetting('sensitivityLevel', this.value)">
+              <option value="low">Low (Few warnings)</option>
+              <option value="medium" selected>Medium (Balanced)</option>
+              <option value="high">High (Most warnings)</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-label">
+            <div class="setting-label-title">Block HIGH Risk Sites</div>
+            <div class="setting-label-description">Automatically block sites with high phishing score</div>
+          </div>
+          <div class="toggle active" id="blockHighToggle" onclick="toggleSetting('blockHigh')">
+            <div class="toggle-slider"></div>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-label">
+            <div class="setting-label-title">Warn on MEDIUM Risk Sites</div>
+            <div class="setting-label-description">Show warning banner for medium-risk sites</div>
+          </div>
+          <div class="toggle active" id="warnMediumToggle" onclick="toggleSetting('warnMedium')">
+            <div class="toggle-slider"></div>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-label">
+            <div class="setting-label-title">Form Protection</div>
+            <div class="setting-label-description">Warn before submitting passwords on risky sites</div>
+          </div>
+          <div class="toggle active" id="formProtectToggle" onclick="toggleSetting('formProtection')">
+            <div class="toggle-slider"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Cache Settings</div>
+        <div class="setting-item">
+          <div class="setting-label">
+            <div class="setting-label-title">Cache Duration</div>
+            <div class="setting-label-description">How long to remember analysis results</div>
+          </div>
+          <div class="select-group">
+            <select id="cacheDuration" onchange="saveSetting('cacheDuration', this.value)">
+              <option value="5">5 minutes</option>
+              <option value="15" selected>15 minutes</option>
+              <option value="60">1 hour</option>
+              <option value="1440">1 day</option>
+            </select>
+          </div>
+        </div>
+        <div class="button-group">
+          <button class="btn-secondary" onclick="clearCache()">Clear Cache</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Whitelist Tab -->
+    <div id="whitelist" class="tab-content">
+      <div class="section">
+        <div class="section-title">Trusted Domains</div>
+        <div class="section-description">Add domains you trust to skip phishing checks</div>
+        
+        <div class="whitelist-section">
+          <div class="whitelist-input">
+            <input type="text" id="domainInput" placeholder="example.com" />
+            <button class="btn-primary" onclick="addDomain()">Add Domain</button>
+          </div>
+          <div id="whitelistMessage" class="success-message"></div>
+        </div>
+
+        <div class="domain-list" id="whitelistDomains">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Blocked Domains</div>
+        <div class="section-description">Domains you've chosen to block (will always show warning)</div>
+        
+        <div class="domain-list" id="blacklistDomains">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <!-- Backend Tab -->
+    <div id="backend" class="tab-content">
+      <div class="section">
+        <div class="section-title">Backend Configuration</div>
+        <div class="section-description">Connect to a custom analysis backend</div>
+        
+        <div id="backendStatus" class="backend-config">
+          <div class="backend-status">
+            <div class="status-indicator disconnected" id="statusIndicator"></div>
+            <span id="statusText">Backend: Disconnected (Standalone Mode)</span>
+          </div>
+          <div id="statusDetail" style="font-size: 12px; color: #6b7280;">
+            Using local heuristics for analysis
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-label">
+            <div class="setting-label-title">Backend URL</div>
+            <div class="setting-label-description">API endpoint for advanced threat analysis</div>
+          </div>
+          <input type="text" id="backendUrl" placeholder="https://api.example.com" style="flex: 1; margin-left: 16px;" />
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-label">
+            <div class="setting-label-title">API Key</div>
+            <div class="setting-label-description">Authentication token for backend API</div>
+          </div>
+          <input type="text" id="apiKey" placeholder="Your API key" style="flex: 1; margin-left: 16px;" type="password" />
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-label">
+            <div class="setting-label-title">Timeout (seconds)</div>
+            <div class="setting-label-description">How long to wait for backend response</div>
+          </div>
+          <div class="select-group">
+            <select id="backendTimeout" onchange="saveSetting('backendTimeout', this.value)">
+              <option value="5">5 seconds</option>
+              <option value="10" selected>10 seconds</option>
+              <option value="30">30 seconds</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="setting-item">
+          <div class="setting-label">
+            <div class="setting-label-title">Use Standalone Mode</div>
+            <div class="setting-label-description">Fallback to local analysis if backend unavailable</div>
+          </div>
+          <div class="toggle active" id="standaloneToggle" onclick="toggleSetting('standaloneMode')">
+            <div class="toggle-slider"></div>
+          </div>
+        </div>
+
+        <div class="button-group">
+          <button class="btn-primary" onclick="testBackend()">Test Connection</button>
+          <button class="btn-secondary" onclick="saveBackendConfig()">Save Configuration</button>
+        </div>
+
+        <div id="testResult" style="margin-top: 16px;"></div>
+      </div>
+    </div>
+
+    <!-- Statistics Tab -->
+    <div id="statistics" class="tab-content">
+      <div class="section">
+        <div class="section-title">Protection Statistics</div>
+        <div class="section-description">Overview of threats detected and blocked</div>
+
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-value" id="statThreatsBlocked">0</div>
+            <div class="stat-label">Threats Blocked</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statWarnings">0</div>
+            <div class="stat-label">Warnings Shown</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statUrlsScanned">0</div>
+            <div class="stat-label">URLs Scanned</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value" id="statCached">0</div>
+            <div class="stat-label">Cached Results</div>
+          </div>
+        </div>
+
+        <div class="info-box">
+          Statistics are stored locally on your device and never sent to third parties.
+        </div>
+
+        <div class="button-group">
+          <button class="btn-secondary" onclick="resetStatistics()">Reset All Statistics</button>
+          <button class="btn-secondary" onclick="exportStatistics()">Export Data</button>
+        </div>
+      </div>
+
+      <div class="section">
+        <div class="section-title">Recent Activity</div>
+        <div id="recentActivity" style="font-size: 13px; color: #6b7280;">
+          <!-- Populated by JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>WiseShield v1.0.0 | © 2026 Security Team</p>
+    </div>
+  </div>
+
+  <script src="storage.js"></script>
+  <script src="options.js"></script>
+</body>
+</html>

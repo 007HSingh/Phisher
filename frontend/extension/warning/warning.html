@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>⚠️ Security Warning - WiseShield</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 680px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 32px 64px rgba(0, 0, 0, 0.4);
+    }
+
+    .alert-banner {
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 100%);
+      padding: 6px 24px;
+      text-align: center;
+    }
+
+    .alert-text {
+      color: #ffffff;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+    }
+
+    .header {
+      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+      padding: 48px 40px;
+      text-align: center;
+      border-bottom: 2px solid #fecaca;
+    }
+
+    .warning-icon-container {
+      margin-bottom: 24px;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 1;
+      }
+      50% {
+        transform: scale(1.05);
+        opacity: 0.95;
+      }
+    }
+
+    .warning-icon {
+      width: 96px;
+      height: 96px;
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      border-radius: 24px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 52px;
+      box-shadow: 0 12px 32px rgba(239, 68, 68, 0.4);
+    }
+
+    .header h1 {
+      font-size: 36px;
+      font-weight: 800;
+      color: #991b1b;
+      margin-bottom: 12px;
+      letter-spacing: -0.02em;
+    }
+
+    .header-subtitle {
+      font-size: 16px;
+      color: #7f1d1d;
+      font-weight: 600;
+    }
+
+    .content {
+      padding: 40px;
+    }
+
+    .danger-card {
+      background: #fef2f2;
+      border: 2px solid #fecaca;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 28px;
+    }
+
+    .danger-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .danger-icon {
+      width: 40px;
+      height: 40px;
+      background: #fee2e2;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+    }
+
+    .danger-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #991b1b;
+      letter-spacing: -0.01em;
+    }
+
+    .danger-description {
+      color: #7f1d1d;
+      font-size: 14px;
+      line-height: 1.7;
+      font-weight: 500;
+    }
+
+    .info-grid {
+      display: grid;
+      gap: 16px;
+      margin-bottom: 32px;
+    }
+
+    .info-card {
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .info-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 8px;
+    }
+
+    .info-value {
+      font-size: 14px;
+      color: #1f2937;
+      word-break: break-all;
+      font-weight: 600;
+      font-family: 'Monaco', 'Courier New', monospace;
+      line-height: 1.6;
+    }
+
+    .risk-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      padding: 16px 24px;
+      border-radius: 12px;
+      margin-bottom: 32px;
+    }
+
+    .risk-badge-icon {
+      font-size: 32px;
+    }
+
+    .risk-badge-content {
+      flex: 1;
+    }
+
+    .risk-badge-label {
+      font-size: 11px;
+      font-weight: 700;
+      color: #991b1b;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 4px;
+    }
+
+    .risk-badge-score {
+      font-size: 28px;
+      font-weight: 800;
+      color: #dc2626;
+      letter-spacing: -0.02em;
+    }
+
+    .actions {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      padding: 18px 28px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      letter-spacing: 0.01em;
+    }
+
+    .btn-primary {
+      grid-column: 1 / -1;
+      background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
+      color: white;
+      box-shadow: 0 6px 20px rgba(22, 163, 74, 0.3);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(22, 163, 74, 0.4);
+    }
+
+    .btn-secondary {
+      background: #f3f4f6;
+      color: #374151;
+      border: 2px solid #e5e7eb;
+    }
+
+    .btn-secondary:hover {
+      background: #e5e7eb;
+      border-color: #d1d5db;
+    }
+
+    .btn:active {
+      transform: translateY(0);
+    }
+
+    .disclaimer {
+      background: #fffbeb;
+      border: 2px solid #fde047;
+      border-left: 6px solid #eab308;
+      padding: 20px;
+      border-radius: 12px;
+      margin-bottom: 24px;
+    }
+
+    .disclaimer-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+
+    .disclaimer-icon {
+      font-size: 20px;
+    }
+
+    .disclaimer-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #854d0e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .disclaimer-text {
+      font-size: 13px;
+      color: #713f12;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .footer {
+      padding: 24px 32px;
+      background: #f9fafb;
+      border-top: 1px solid #e5e7eb;
+      text-align: center;
+    }
+
+    .footer-brand {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 8px;
+    }
+
+    .footer-icon {
+      width: 24px;
+      height: 24px;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .footer-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #1f2937;
+      letter-spacing: -0.01em;
+    }
+
+    .footer-text {
+      font-size: 12px;
+      color: #9ca3af;
+      font-weight: 500;
+    }
+
+    @media (max-width: 600px) {
+      .actions {
+        grid-template-columns: 1fr;
+      }
+      
+      .btn-primary {
+        grid-column: 1;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="alert-banner">
+      <div class="alert-text">⚠️ Security Alert • Do Not Proceed</div>
+    </div>
+
+    <div class="header">
+      <div class="warning-icon-container">
+        <div class="warning-icon">🚨</div>
+      </div>
+      <h1>Dangerous Site Blocked</h1>
+      <p class="header-subtitle">WiseShield detected potential phishing activity</p>
+    </div>
+
+    <div class="content">
+      <div class="danger-card">
+        <div class="danger-header">
+          <div class="danger-icon">⛔</div>
+          <div class="danger-title">Why was this blocked?</div>
+        </div>
+        <p class="danger-description" id="reasonText">
+          This site has been identified as a potential phishing attempt designed to steal your personal information, passwords, or financial data. Our security analysis detected multiple suspicious indicators.
+        </p>
+      </div>
+
+      <div class="info-grid">
+        <div class="info-card">
+          <div class="info-label">Blocked URL</div>
+          <div class="info-value" id="urlText">Loading...</div>
+        </div>
+      </div>
+
+      <div class="risk-badge">
+        <div class="risk-badge-icon">🎯</div>
+        <div class="risk-badge-content">
+          <div class="risk-badge-label">Threat Level</div>
+          <div class="risk-badge-score" id="scoreValue">Loading...</div>
+        </div>
+      </div>
+
+      <div class="actions">
+        <button class="btn btn-primary" id="goBackBtn">
+          <span>🛡️</span>
+          <span>Return to Safety</span>
+        </button>
+        <button class="btn btn-secondary" id="proceedBtn">
+          <span>⚠️</span>
+          <span>Advanced: Proceed</span>
+        </button>
+      </div>
+
+      <div class="disclaimer">
+        <div class="disclaimer-header">
+          <span class="disclaimer-icon">⚡</span>
+          <span class="disclaimer-title">Proceed at Your Own Risk</span>
+        </div>
+        <p class="disclaimer-text">
+          If you choose to continue, do not enter any sensitive information such as passwords, credit card details, social security numbers, or personal data. WiseShield cannot be held responsible for any losses or damages that may occur.
+        </p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <div class="footer-brand">
+        <div class="footer-icon">🛡️</div>
+        <div class="footer-name">WiseShield</div>
+      </div>
+      <div class="footer-text">AI-powered real-time phishing protection</div>
+    </div>
+  </div>
+
+  <script>
+    // Parse URL parameters
+    const params = new URLSearchParams(window.location.search);
+    const blockedUrl = params.get('url');
+    const score = params.get('score');
+    const reason = params.get('reason');
+
+    // Display URL
+    if (blockedUrl) {
+      document.getElementById('urlText').textContent = decodeURIComponent(blockedUrl);
+    }
+
+    // Display score
+    if (score) {
+      const scorePercent = Math.round(parseFloat(score) * 100);
+      document.getElementById('scoreValue').textContent = scorePercent + '% Risk';
+    }
+
+    // Display reason
+    if (reason) {
+      document.getElementById('reasonText').textContent = decodeURIComponent(reason);
+    }
+
+    // Go back button
+    document.getElementById('goBackBtn').addEventListener('click', () => {
+      window.history.back();
+    });
+
+    // Proceed anyway button
+    document.getElementById('proceedBtn').addEventListener('click', async () => {
+      if (blockedUrl) {
+        // Show confirmation
+        const confirmed = confirm(
+          '⚠️ FINAL WARNING\n\n' +
+          'You are about to visit a site flagged as highly dangerous.\n\n' +
+          '❌ DO NOT enter passwords\n' +
+          '❌ DO NOT enter personal information\n' +
+          '❌ DO NOT enter payment details\n\n' +
+          'Are you absolutely sure you want to proceed?'
+        );
+
+        if (confirmed) {
+          // Tell background script to unblock this URL
+          await chrome.runtime.sendMessage({
+            action: 'unblockURL',
+            url: decodeURIComponent(blockedUrl)
+          });
+
+          // Navigate to the URL
+          window.location.href = decodeURIComponent(blockedUrl);
+        }
+      }
+    });
+  </script>
+</body>
+</html>

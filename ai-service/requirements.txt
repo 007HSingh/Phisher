@@ -1,0 +1,5 @@
+# WiseShield Backend Dependencies
+Flask==2.3.2
+Flask-CORS==4.0.0
+pyopenssl==23.2.0
+werkzeug==2.3.6

@@ -1,0 +1,47 @@
+# Java
+backend/target/
+backend/*.jar
+backend/*.war
+backend/*.ear
+backend/.mvn/wrapper/maven-wrapper.jar
+backend/.DS_Store
+backend/*.iml
+backend/.idea/
+backend/.classpath
+backend/.project
+backend/.settings/
+
+# Node (Next.js)
+frontend/website/node_modules/
+frontend/website/.next/
+frontend/website/out/
+frontend/website/build/
+frontend/website/.DS_Store
+frontend/website/*.log
+frontend/website/.env.local
+frontend/website/.env.development.local
+frontend/website/.env.test.local
+frontend/website/.env.production.local
+
+# Python (AI Service)
+ai-service/__pycache__/
+ai-service/*.py[cod]
+ai-service/*$py.class
+ai-service/.venv
+ai-service/venv/
+ai-service/ENV/
+ai-service/env.bak/
+ai-service/venv.bak/
+ai-service/model/*.pkl
+
+# Docker
+.docker/
+
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db

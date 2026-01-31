@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>WiseShield</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      width: 400px;
+      min-height: 500px;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: #f8f9fb;
+      color: #1a1d29;
+      overflow-x: hidden;
+    }
+
+    .header {
+      background: #ffffff;
+      padding: 20px;
+      border-bottom: 1px solid #e8eaed;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      box-shadow: 0 2px 8px rgba(79, 70, 229, 0.2);
+    }
+
+    .brand-name {
+      font-size: 18px;
+      font-weight: 700;
+      color: #1a1d29;
+      letter-spacing: -0.02em;
+    }
+
+    .current-url {
+      font-size: 12px;
+      color: #6b7280;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      font-weight: 500;
+    }
+
+    .content {
+      padding: 20px;
+    }
+
+    .status-card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 28px 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04);
+      border: 1px solid #e8eaed;
+      transition: all 0.3s ease;
+    }
+
+    .status-card.safe {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      border-color: #86efac;
+    }
+
+    .status-card.medium {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+      border-color: #fcd34d;
+    }
+
+    .status-card.high {
+      background: linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%);
+      border-color: #fca5a5;
+    }
+
+    .status-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .status-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      background: rgba(255, 255, 255, 0.8);
+      backdrop-filter: blur(10px);
+    }
+
+    .status-icon.safe { background: #dcfce7; }
+    .status-icon.medium { background: #fef3c7; }
+    .status-icon.high { background: #fee2e2; }
+
+    .status-info {
+      flex: 1;
+    }
+
+    .status-label {
+      font-size: 13px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 4px;
+    }
+
+    .status-label.safe { color: #16a34a; }
+    .status-label.medium { color: #d97706; }
+    .status-label.high { color: #dc2626; }
+
+    .status-title {
+      font-size: 22px;
+      font-weight: 700;
+      color: #1a1d29;
+      letter-spacing: -0.02em;
+    }
+
+    .risk-meter {
+      margin-top: 16px;
+      margin-bottom: 12px;
+    }
+
+    .risk-meter-label {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .risk-meter-text {
+      font-size: 12px;
+      font-weight: 600;
+      color: #6b7280;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .risk-meter-value {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .risk-meter-value.safe { color: #16a34a; }
+    .risk-meter-value.medium { color: #d97706; }
+    .risk-meter-value.high { color: #dc2626; }
+
+    .risk-meter-bar {
+      height: 8px;
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .risk-meter-fill {
+      height: 100%;
+      border-radius: 4px;
+      transition: width 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .risk-meter-fill.safe { background: linear-gradient(90deg, #22c55e, #16a34a); }
+    .risk-meter-fill.medium { background: linear-gradient(90deg, #f59e0b, #d97706); }
+    .risk-meter-fill.high { background: linear-gradient(90deg, #ef4444, #dc2626); }
+
+    .status-description {
+      font-size: 13px;
+      color: #4b5563;
+      line-height: 1.5;
+      font-weight: 500;
+    }
+
+    .section {
+      margin-bottom: 20px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .section-icon {
+      font-size: 16px;
+    }
+
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: #1a1d29;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .issues-list {
+      background: #ffffff;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e8eaed;
+    }
+
+    .issue-item {
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-bottom: 1px solid #f3f4f6;
+      font-size: 13px;
+      color: #374151;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+
+    .issue-item:last-child {
+      border-bottom: none;
+    }
+
+    .issue-item:hover {
+      background: #f9fafb;
+    }
+
+    .issue-icon {
+      width: 24px;
+      height: 24px;
+      background: #fef3c7;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      flex-shrink: 0;
+    }
+
+    .recommendation-box {
+      background: #ffffff;
+      border: 1px solid #e8eaed;
+      border-radius: 12px;
+      padding: 16px;
+    }
+
+    .recommendation-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #dbeafe, #bfdbfe);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      margin-bottom: 10px;
+    }
+
+    .recommendation-text {
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.6;
+      font-weight: 500;
+    }
+
+    .action-button {
+      width: 100%;
+      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      color: white;
+      border: none;
+      padding: 14px 20px;
+      border-radius: 10px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+      letter-spacing: 0.02em;
+    }
+
+    .action-button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 16px rgba(79, 70, 229, 0.4);
+    }
+
+    .action-button:active {
+      transform: translateY(0);
+    }
+
+    .loading-state,
+    .error-state {
+      text-align: center;
+      padding: 60px 20px;
+    }
+
+    .spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid #f3f4f6;
+      border-top: 3px solid #4f46e5;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      margin: 0 auto 20px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      font-size: 14px;
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    .error-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+
+    .error-message {
+      font-size: 14px;
+      color: #6b7280;
+      font-weight: 500;
+    }
+
+    .footer {
+      padding: 16px 20px;
+      background: #ffffff;
+      border-top: 1px solid #e8eaed;
+      text-align: center;
+    }
+
+    .footer-text {
+      font-size: 11px;
+      color: #9ca3af;
+      font-weight: 500;
+    }
+
+    .footer-link {
+      color: #4f46e5;
+      text-decoration: none;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand">
+      <div class="brand-icon">🛡️</div>
+      <div class="brand-name">WiseShield</div>
+    </div>
+    <div class="current-url" id="currentUrl">Loading...</div>
+  </div>
+
+  <div class="content">
+    <div id="loadingState" class="loading-state">
+      <div class="spinner"></div>
+      <div class="loading-text">Analyzing security...</div>
+    </div>
+
+    <div id="errorState" class="error-state" style="display: none;">
+      <div class="error-icon">⚠️</div>
+      <div class="error-message" id="errorMessage">Unable to analyze this page</div>
+    </div>
+
+    <div id="resultState" style="display: none;">
+      <div id="statusCard" class="status-card">
+        <div class="status-header">
+          <div class="status-icon" id="statusIcon">✓</div>
+          <div class="status-info">
+            <div class="status-label" id="statusLabel">Secure</div>
+            <div class="status-title" id="statusTitle">Safe</div>
+          </div>
+        </div>
+
+        <div class="risk-meter">
+          <div class="risk-meter-label">
+            <span class="risk-meter-text">Risk Score</span>
+            <span class="risk-meter-value" id="riskValue">0%</span>
+          </div>
+          <div class="risk-meter-bar">
+            <div class="risk-meter-fill" id="riskFill" style="width: 0%"></div>
+          </div>
+        </div>
+
+        <div class="status-description" id="statusDescription">
+          This site appears to be legitimate
+        </div>
+      </div>
+
+      <div class="section" id="issuesSection" style="display: none;">
+        <div class="section-header">
+          <span class="section-icon">⚠️</span>
+          <span class="section-title">Detected Issues</span>
+        </div>
+        <div class="issues-list" id="issuesList"></div>
+      </div>
+
+      <div class="section" id="recommendationSection" style="display: none;">
+        <div class="section-header">
+          <span class="section-icon">💡</span>
+          <span class="section-title">Recommendation</span>
+        </div>
+        <div class="recommendation-box">
+          <div class="recommendation-icon">ℹ️</div>
+          <div class="recommendation-text" id="recommendationText"></div>
+        </div>
+      </div>
+
+      <button class="action-button" id="recheckBtn">
+        <span>🔄</span> Recheck Page
+      </button>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-text">
+      Protected by <span class="footer-link">WiseShield</span> • Real-time Security
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>
