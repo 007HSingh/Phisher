@@ -1,7 +1,7 @@
 // Import utilities and modules
 importScripts('utils.js');
-importScripts('storage.js');
-importScripts('backend-integration.js');
+importScripts('utils/storage.js');
+importScripts('utils/backend-integration.js');
 
 // Cache for recent checks to avoid duplicate requests
 const analysisCache = new Map();
@@ -19,10 +19,10 @@ chrome.runtime.onInstalled.addListener(async (details) => {
     // Open onboarding page on first install
     chrome.tabs.create({ url: chrome.runtime.getURL('onboarding.html') });
   }
-  
+
   // Initialize storage defaults
   await wsStorage.initializeDefaults();
-  
+
   console.log('🛡️ WiseShield installed/updated');
 });
 
@@ -78,7 +78,7 @@ async function checkURL(url, tabId) {
     await updateBadge(tabId, 'CHECKING');
 
     let result;
-    
+
     // Try to use backend if available
     if (!STANDALONE_MODE && !await wsStorage.getSetting(wsStorage.STORAGE_KEYS.STANDALONE_MODE, true)) {
       try {
@@ -117,12 +117,12 @@ async function checkURL(url, tabId) {
 async function analyzeURLClientSide(url) {
   const suspiciousIndicators = [];
   let score = 0;
-  
+
   try {
     const urlObj = new URL(url);
     const hostname = urlObj.hostname;
     const path = urlObj.pathname;
-    
+
     // Check whitelist first
     const whitelist = await wsStorage.getWhitelist();
     if (whitelist.includes(hostname) || whitelist.some(domain => hostname.endsWith('.' + domain))) {
@@ -146,12 +146,12 @@ async function analyzeURLClientSide(url) {
         recommendation: 'This site is in your blocklist.'
       };
     }
-    
+
     // Known safe domains (whitelist)
-    const safeDomains = ['google.com', 'youtube.com', 'facebook.com', 'amazon.com', 
-                        'microsoft.com', 'apple.com', 'github.com', 'stackoverflow.com',
-                        'wikipedia.org', 'twitter.com', 'linkedin.com', 'netflix.com'];
-    
+    const safeDomains = ['google.com', 'youtube.com', 'facebook.com', 'amazon.com',
+      'microsoft.com', 'apple.com', 'github.com', 'stackoverflow.com',
+      'wikipedia.org', 'twitter.com', 'linkedin.com', 'netflix.com'];
+
     for (const safeDomain of safeDomains) {
       if (hostname.endsWith(safeDomain)) {
         return {
@@ -163,62 +163,62 @@ async function analyzeURLClientSide(url) {
         };
       }
     }
-    
+
     // Check for IP address instead of domain
     if (/\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}/.test(hostname)) {
       suspiciousIndicators.push('Uses IP address instead of domain name');
       score += 0.3;
     }
-    
+
     // Check for suspicious TLDs
     const suspiciousTLDs = ['.tk', '.ml', '.ga', '.cf', '.gq', '.xyz', '.top', '.club'];
     if (suspiciousTLDs.some(tld => hostname.endsWith(tld))) {
       suspiciousIndicators.push('Suspicious top-level domain');
       score += 0.25;
     }
-    
+
     // Check URL length
     if (url.length > 75) {
       suspiciousIndicators.push('Unusually long URL');
       score += 0.15;
     }
-    
+
     // Check for @ symbol (used to hide real domain)
     if (url.includes('@')) {
       suspiciousIndicators.push('Contains @ symbol in URL');
       score += 0.3;
     }
-    
+
     // Check for excessive subdomains
     const subdomainCount = hostname.split('.').length - 2;
     if (subdomainCount > 3) {
       suspiciousIndicators.push('Excessive number of subdomains');
       score += 0.2;
     }
-    
+
     // Check for phishing keywords
-    const phishingKeywords = ['login', 'signin', 'verify', 'secure', 'account', 
-                             'update', 'banking', 'paypal', 'confirm', 'suspend'];
+    const phishingKeywords = ['login', 'signin', 'verify', 'secure', 'account',
+      'update', 'banking', 'paypal', 'confirm', 'suspend'];
     const lowerURL = url.toLowerCase();
     const keywordMatches = phishingKeywords.filter(kw => lowerURL.includes(kw));
     if (keywordMatches.length > 2) {
       suspiciousIndicators.push(`Contains phishing keywords: ${keywordMatches.join(', ')}`);
       score += 0.25;
     }
-    
+
     // Check for HTTP (not HTTPS)
     if (urlObj.protocol === 'http:') {
       suspiciousIndicators.push('Not using HTTPS encryption');
       score += 0.1;
     }
-    
+
     // Check for excessive hyphens
     const hyphenCount = hostname.split('-').length - 1;
     if (hyphenCount > 3) {
       suspiciousIndicators.push('Excessive hyphens in domain');
       score += 0.15;
     }
-    
+
     // Determine risk level
     let risk_level;
     if (score > 0.6) {
@@ -228,17 +228,17 @@ async function analyzeURLClientSide(url) {
     } else {
       risk_level = 'SAFE';
     }
-    
+
     return {
       risk_level: risk_level,
       score: Math.min(score, 0.95),
-      reason: suspiciousIndicators.length > 0 
+      reason: suspiciousIndicators.length > 0
         ? `Detected ${suspiciousIndicators.length} suspicious indicator${suspiciousIndicators.length !== 1 ? 's' : ''}`
         : 'No major issues detected',
       features_detected: suspiciousIndicators.slice(0, 5),
       recommendation: getRecommendation(risk_level)
     };
-    
+
   } catch (error) {
     console.error('Error in client-side analysis:', error);
     return {
@@ -293,9 +293,9 @@ async function handleAnalysisResult(result, url, tabId) {
   const blockHigh = await wsStorage.getSetting(wsStorage.STORAGE_KEYS.BLOCK_HIGH, true);
   if (result.risk_level === 'HIGH' && blockHigh && !blockedURLs.has(url)) {
     blockedURLs.add(url);
-    
+
     // Encode the URL and risk data for the warning page
-    const warningURL = chrome.runtime.getURL('warning.html') + 
+    const warningURL = chrome.runtime.getURL('warning.html') +
       '?url=' + encodeURIComponent(url) +
       '&score=' + encodeURIComponent(result.score) +
       '&reason=' + encodeURIComponent(result.reason || 'Suspected phishing site');
@@ -355,19 +355,19 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
     }
     sendResponse({ success: true });
   }
-  
+
   if (request.action === 'recheckURL') {
     const url = request.url;
     const tabId = sender.tab?.id || request.tabId;
-    
+
     // Clear cache for this URL
     analysisCache.delete(url);
-    
+
     // Recheck
     checkURL(url, tabId).then(() => {
       sendResponse({ success: true });
     });
-    
+
     return true; // Keep channel open for async response
   }
 
@@ -388,16 +388,16 @@ chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
   if (request.action === 'reportFalsePositive') {
     const url = request.url;
     const reportedRiskLevel = request.reportedRiskLevel;
-    
+
     // Report to backend if available
     backendIntegration.reportFalsePositive(url, reportedRiskLevel).then((success) => {
       wsStorage.recordActivity('false_positive_report', url, reportedRiskLevel);
       sendResponse({ success: success });
     });
-    
+
     return true;
   }
-  
+
   return false;
 });
 
